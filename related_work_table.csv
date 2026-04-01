@@ -1,0 +1,10 @@
+System/Approach,Protects Intra-Package?,Authentication,Integrity,Replay Protection,Die-to-Die Optimized,Multi-Vendor Compatible
+Intel TME/MKTME,No (DRAM only),No,Yes (XTS),No,No,No
+AMD SEV/SEV-SNP,No (DRAM only),Yes,Yes (GHASH),Yes,No,No
+NoC Encryption [Fiorin08],Yes (on-die),No,No,No,No,No
+SecNoC [Sajeesh17],Yes (on-die),Yes,Yes (HMAC),No,No,No
+UCIe Standard,No,No,No,No,N/A,Yes
+AMD MI300,No,No,CRC only,No,No,Limited
+Intel Ponte Vecchio,No,No,CRC only,No,No,Yes
+NVIDIA Grace Hopper,No,No,CRC only,No,No,Yes
+Proposed SCE,Yes,Yes,Yes (Poly1305),Yes,Yes,Yes
