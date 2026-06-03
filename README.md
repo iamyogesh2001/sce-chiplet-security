@@ -26,9 +26,9 @@ MWSCAS is the flagship North American conference of the IEEE Circuits and System
 
 | Name | Affiliation | Role |
 |------|-------------|------|
-| Yogesh Rethinapandian | Dept. of ECE, University of Illinois Chicago | First Author, Corresponding Author |
-| Arun Karthik Sundararajan | IEEE Member | Second Author |
-| Kaushik Kumar | Dept. of Data Science, University of Arizona | Third Author |
+| Yogesh Rethinapandian | Dept. of ECE, University of Illinois Chicago | First Author · Corresponding Author |
+| Arun Karthik Sundararajan | IEEE Member | Co-Author |
+| Kaushik Kumar | Dept. of Data Science, University of Arizona | Co-Author |
 
 ---
 
@@ -139,7 +139,7 @@ If you use this code or build on this work, please cite:
                Circuits and Systems (MWSCAS)},
   year      = {2026},
   address   = {Cincinnati, OH, USA},
-  note      = {IEEE Xplore DOI: TBD}
+  note      = {Accepted. IEEE Xplore DOI: TBD. To appear Aug. 2026}
 }
 ```
 
