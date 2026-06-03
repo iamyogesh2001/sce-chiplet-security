@@ -1,112 +1,152 @@
-# Secure Die-to-Die Communication for Chiplet-Based AI Accelerators
+# A Lightweight Secure Communication Engine for UCIe Die-to-Die Chiplet Interconnects in AI Accelerators
 
-**A Lightweight Framework for Trusted Multi-Vendor Integration**
+## Publication Status
 
-**Authors:** Yogesh Rethinapandian, Arun Karthik Sundararajan  
-**Submitted to:** Journal of Engineering and Applied Science (Springer Nature)  
-**Corresponding Author:** yrethi2@uic.edu
+| Stage | Status |
+|-------|--------|
+| Submission | ✅ Submitted |
+| Peer Review | ✅ Reviewed |
+| Decision | ✅ **Accepted** |
+| Camera-Ready | ✅ Submitted |
+| IEEE Xplore | 🔄 Pending Publication |
 
----
-
-## Overview
-
-This repository contains the simulation code and generated results supporting the paper "Secure Die-to-Die Communication for Chiplet-Based AI Accelerators: A Lightweight Framework for Trusted Multi-Vendor Integration," submitted to the Journal of Engineering and Applied Science (JEAS), Springer Nature.
-
-The paper proposes a Secure Communication Engine (SCE) framework that provides mutual authentication, confidentiality, integrity, and replay protection for die-to-die chiplet interconnects, with specific optimization for UCIe Gen 2 links under AI accelerator workload patterns.
-
----
-
-## Repository Contents
-
-| File | Description |
-|------|-------------|
-| `simulate_sce.py` | Complete discrete-event packet-level simulator (~800 lines, single file) |
-| `sensitivity_packet_size.png` | Throughput and latency overhead vs. packet size (64 B to 16 KB) |
-| `sensitivity_crypto_throughput.png` | Throughput reduction vs. crypto engine performance ratio |
-| `sensitivity_burstiness.png` | Latency overhead vs. traffic burstiness level |
-| `summary_table.csv` | Baseline performance metrics: encrypted vs. unencrypted UCIe link |
-| `related_work_table.csv` | Security feature comparison across 9 existing hardware systems |
+**Conference:** 2026 IEEE 69th International Midwest Symposium on Circuits and Systems (MWSCAS)
+**Date:** August 9–12, 2026 — Cincinnati, Ohio, USA
+**IEEE Xplore DOI:** TBD
 
 ---
 
-## Simulation Methodology
+## About the Conference
 
-The simulator models a UCIe Gen 2 die-to-die link operating at 2 GHz with a 256-bit data bus, providing 128 GB/s raw bandwidth. Cryptographic operations are parameterized from published hardware implementations of ChaCha20-Poly1305 (Aragon et al., IEEE TCAS-I, 2019): 10 ns initial pipeline fill latency with line-rate steady-state throughput and speculative keystream generation enabled.
-
-Traffic generation reflects realistic AI accelerator communication patterns:
-- Small control packets: 64 to 256 B (20% of traffic)
-- Medium data transfers: 1 to 4 KB (50% of traffic)
-- Large tensor movements: 16 to 64 KB (30% of traffic)
-
-Each simulation run processes 10,000 packets. All results are fully deterministic and reproducible using NumPy random seed 42.
+MWSCAS is the flagship North American conference of the IEEE Circuits and Systems Society (IEEE CASS), with an unbroken 69-year history making it one of the oldest continuously running IEEE technical conferences in existence. The 2026 edition continues a tradition of bringing together researchers from academia and industry across circuits, systems, AI hardware, and emerging technologies. Accepted papers are published in the IEEE Xplore digital library and indexed in all major academic databases.
 
 ---
 
-## Key Results
+## Authors
 
-**Baseline comparison (10,000 packets, mixed AI workload):**
-
-| Metric | Unencrypted | SCE-Protected | Overhead |
-|--------|-------------|---------------|----------|
-| Mean Latency | 1,467.86 ns | 3,030.70 ns | +106.47% |
-| P95 Latency | 4,699.82 ns | 7,875.26 ns | +67.56% |
-| P99 Latency | 7,578.64 ns | 10,517.21 ns | +38.77% |
-| Throughput | 279.40 GB/s | 279.40 GB/s | <0.01% |
-| Auth Tag Overhead | 0.00% | 0.13% | +0.13% |
-
-Throughput overhead is negligible (below 0.1%) for KB-scale AI tensor transfers. Mean latency overhead of 106% decreases to 38% at the P99 tail owing to burst amortization effects.
+| Name | Affiliation | Role |
+|------|-------------|------|
+| Yogesh Rethinapandian | Dept. of ECE, University of Illinois Chicago | First Author, Corresponding Author |
+| Arun Karthik Sundararajan | IEEE Member | Second Author |
+| Kaushik Kumar | Dept. of Data Science, University of Arizona | Third Author |
 
 ---
 
-## Reproducing Results
+## Abstract
 
-**Requirements:**
+Modern AI accelerators based on chiplet architectures, including AMD MI300, Intel Ponte Vecchio, and NVIDIA Grace Hopper, universally operate under a critical implicit assumption: all co-packaged dies form a trusted computing base. Die-to-die interconnects such as UCIe, BoW, and AIB carry AI model weights, activations, and gradients in plaintext, leaving them exposed to supply-chain-injected hardware Trojans, compromised third-party IP, and side-channel attacks. This paper presents **SCE (Secure Communication Engine)**, a lightweight hardware-friendly bump-in-the-wire module that adds ChaCha20-Poly1305 authenticated encryption, mutual HMAC-SHA256 challenge-response authentication, and sliding-window replay protection to UCIe Gen 2 die-to-die links.
 
-```bash
-pip install numpy pandas matplotlib seaborn
+Key results:
+- **P99 latency overhead: 38.8%** (decreases through burst amortization)
+- **Throughput impact: <0.01%** for KB-scale AI tensor transfers
+- **Power overhead: ~240 mW/link** (0.25–0.4% of system TDP)
+- **Area: ~0.75 mm² per link** (~0.3% of GPU chiplet footprint)
+
+---
+
+## Repository Structure
+
+```
+sce-chiplet-security/
+├── simulate_sce.py          # Discrete-event packet-level simulator
+├── summary_table.csv        # Simulation results summary
+├── related_work_table.csv   # Security feature comparison table
+├── sensitivity_packet_size.png
+├── sensitivity_burstiness.png
+├── sensitivity_crypto_throughput.png
+├── README.md
+└── rtl/
+    ├── README.md            # RTL documentation and attribution
+    ├── chacha20_core.v      # ChaCha20 keystream core (original)
+    ├── sce_top.v            # SCE top-level wrapper (original)
+    ├── tb_sce.v             # Testbench with RFC 7539 NIST test vectors
+    ├── poly1305.v           # Poly1305 top-level (secworks, see attribution)
+    ├── poly1305_core.v      # Poly1305 core (secworks)
+    ├── poly1305_pblock.v    # Poly1305 block processing (secworks)
+    ├── poly1305_mulacc.v    # Poly1305 multiply-accumulate (secworks)
+    ├── poly1305_final.v     # Poly1305 finalization (secworks)
+    └── tb_poly1305.v        # Poly1305 testbench (secworks)
 ```
 
-**Run full simulation:**
+---
 
+## Simulation
+
+### Requirements
 ```bash
-python simulate_sce.py
+pip install numpy matplotlib seaborn
 ```
 
-This generates all sensitivity plots, summary tables, and baseline comparison results in a local `sce_results/` directory. Runtime is approximately 30 seconds on a standard laptop.
+### Run
+```bash
+python3 simulate_sce.py
+```
 
-**Configurable parameters** (top of `simulate_sce.py`):
-- `LinkConfig`: clock speed, link width
-- `CryptoConfig`: crypto latency, authentication tag size, rekeying interval
-- `PacketConfig`: packet size distributions and traffic mix
+Reproduces all results in the paper. Uses **NumPy random seed 42** — all results are fully deterministic and reproducible with no external dependencies beyond standard scientific Python.
+
+### What the simulator models
+- UCIe Gen 2 die-to-die link at 2 GHz, 256-bit bus, 128 GB/s raw bandwidth
+- ChaCha20-Poly1305 with 10 ns pipeline fill latency (from published silicon data)
+- Realistic AI accelerator traffic: 20% control (64–256 B), 50% data (1–4 KB), 30% tensors (16–64 KB)
+- 10,000 packets per run, five-dimensional parameter sweeps
 
 ---
 
-## Simulation Scope and Limitations
+## RTL Hardware Implementation
 
-The simulator models the cryptographic and protocol-level overhead of the SCE framework. The following are explicitly out of scope:
+### ChaCha20 Core (Original)
+The ChaCha20 encryption core is implemented in synthesizable SystemVerilog and functionally verified against **RFC 7539 NIST test vectors** using Icarus Verilog simulation.
 
-- Physical layer signal integrity (crosstalk, inter-symbol interference)
-- Denial-of-service attacks via malicious packet drops
-- Invasive physical attacks requiring package decapsulation
+```bash
+# Install tools
+apt-get install iverilog yosys
 
-These limitations are discussed in full in Section 8 of the paper.
+# Simulate (verify RFC 7539 test vectors)
+cd rtl
+iverilog -o sim_sce tb_sce.v chacha20_core.v poly1305_core.v sce_top.v
+vvp sim_sce
+
+# Synthesize (get gate counts)
+yosys -s synth.ys
+```
+
+**Synthesis results (Yosys):**
+- ChaCha20 core: **795 cells**
+- Poly1305 core: **~19,000 cells** (secworks optimized implementation)
+
+### Poly1305 MAC (Attribution)
+The Poly1305 authentication core is from the open-source hardware implementation by **Joachim Strömbergson**:
+
+> **secworks/poly1305** — Hardware implementation of the Poly1305 message authentication function
+> RFC 8439 compliant · MIT License
+> https://github.com/secworks/poly1305
+
+All Poly1305 files in the `rtl/` folder are reproduced from that repository with full attribution. The original copyright and license terms apply to those files. Our contribution is the ChaCha20 core (`chacha20_core.v`), the SCE top-level wrapper (`sce_top.v`), and the integrated testbench (`tb_sce.v`).
 
 ---
 
 ## Citation
 
-If you use this simulation code or results in your research, please cite:
+If you use this code or build on this work, please cite:
 
-```
-Y. Rethinapandian and A. K. Sundararajan, "Secure Die-to-Die Communication 
-for Chiplet-Based AI Accelerators: A Lightweight Framework for Trusted 
-Multi-Vendor Integration," Journal of Engineering and Applied Science, 
-Springer Nature, 2025 (under review).
+```bibtex
+@inproceedings{rethinapandian2026sce,
+  title     = {A Lightweight Secure Communication Engine for {UCIe}
+               Die-to-Die Chiplet Interconnects in {AI} Accelerators},
+  author    = {Rethinapandian, Yogesh and Sundararajan, Arun Karthik
+               and Kumar, Kaushik},
+  booktitle = {Proc. 69th IEEE International Midwest Symposium on
+               Circuits and Systems (MWSCAS)},
+  year      = {2026},
+  address   = {Cincinnati, OH, USA},
+  note      = {IEEE Xplore DOI: TBD}
+}
 ```
 
 ---
 
 ## License
 
-This code is made available for academic research and peer review purposes.  
-Copyright 2025 Yogesh Rethinapandian. All rights reserved.
+Simulation code and original RTL (`chacha20_core.v`, `sce_top.v`, `tb_sce.v`) are released under the **MIT License**.
+
+Poly1305 RTL files are from [secworks/poly1305](https://github.com/secworks/poly1305) and retain their original MIT license and copyright by Joachim Strömbergson.
