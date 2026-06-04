@@ -1,0 +1,7 @@
+Metric,Unencrypted,Encrypted (SCE),Overhead
+Mean Latency (ns),1467.86,3030.70,+106.47%
+P95 Latency (ns),4699.82,7875.26,+67.56%
+P99 Latency (ns),7578.64,10517.21,+38.77%
+Throughput (GB/s),279.40,279.40,-0.00%
+Auth Tag Overhead (%),0.00,0.13,+0.13%
+Rekeying Events,0,0,N/A
