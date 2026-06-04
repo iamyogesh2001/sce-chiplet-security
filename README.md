@@ -22,6 +22,14 @@ MWSCAS is the flagship North American conference of the IEEE Circuits and System
 
 ---
 
+## Architecture
+
+![SCE System Architecture](sce_arch.png)
+
+*Fig. 1 — SCE system architecture. Each chiplet integrates the Secure Communication Engine (SCE) as a transparent bump-in-the-wire between the UCIe Protocol Layer and PHY. The Root-of-Trust (RoT) chiplet provisions pre-shared keys at manufacturing time via HKDF. All die-to-die traffic is encrypted and authenticated via ChaCha20-Poly1305 with 16-byte Poly1305 authentication tags per packet.*
+
+---
+
 ## Authors
 
 | Name | Affiliation | Role |
